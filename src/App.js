@@ -1,26 +1,41 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, {Component} from 'react';
 import './App.css';
+import CardList from './CardList';
+import "tachyons"
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
+class App extends Component {
+  constructor(props){
+    super(props);
+
+    this.state={
+      people:[],
+    }
+    this.getPeople=this.getPeople.bind(this); 
+  }
+
+  getPeople(){
+    fetch("https://swapi.co/api/people/")
+    .then((response)=>response.json())
+      .then(data =>
+        this.setState({
+          people: data.results,
+          isLoading: false,
+        })
+      )
+    }
+  
+  componentDidMount(){
+    this.getPeople()
+  }
+  render(){   
+    const{people}=this.state;
+    return (
+      <div className="tc">
+        <img src="https://images.cooltext.com/5309767.png" alt="starwar"/>
+        <CardList people={people}/>   
+        &copy;yoursweetnightmare     
+      </div>
+    );
+}}
 
 export default App;
